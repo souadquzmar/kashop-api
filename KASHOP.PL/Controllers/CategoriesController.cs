@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using KASHOP.BLL.Service;
 using KASHOP.DAL.Data;
 using KASHOP.DAL.DTO.Request;
 using KASHOP.DAL.DTO.Response;
@@ -19,28 +20,27 @@ namespace KASHOP.PL.Controllers
     [Route("api/[controller]")]
     public class CategoriesController : ControllerBase
     {
-        private readonly ICategoryRepository _categoryRepository;
+        private readonly ICategoryService _categoryService;
         private readonly IStringLocalizer<SharedResources> _localizer;
-        public CategoriesController(ICategoryRepository categoryRepository, IStringLocalizer<SharedResources> localizer)
+        public CategoriesController(ICategoryService categoryService, IStringLocalizer<SharedResources> localizer)
         {
-            _categoryRepository=categoryRepository;
+            _categoryService=categoryService;
             _localizer=localizer;
         }
         [HttpPost("")]
-        public IActionResult Create(CategoryRequest request)
+        public async Task<IActionResult> Create(CategoryRequest request)
         {
-            var category = request.Adapt<Category>();
-            _categoryRepository.Create(category);
+            var response = await _categoryService.CreateCategory(request);
             return Ok(new
             {
-                message = _localizer["Success"].Value
+                message = _localizer["Success"].Value,
+                response
             });
         }
         [HttpGet("")]
-        public IActionResult Get()
+        public async Task<IActionResult> Index()
         {
-            var categories = _categoryRepository.GetAll();
-            var response = categories.Adapt<List<CategoryResponse>>();
+            var response = await _categoryService.GetAllCategories();
             return Ok(new
             {
                 data = response,

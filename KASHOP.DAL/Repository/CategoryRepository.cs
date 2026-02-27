@@ -8,25 +8,10 @@ using Microsoft.EntityFrameworkCore;
 
 namespace KASHOP.DAL.Repository
 {
-    public class CategoryRepository : ICategoryRepository
+    public class CategoryRepository : GenericRepository<Category>, ICategoryRepository
     {
-        private readonly ApplicationDbContext _context;
-        public CategoryRepository(ApplicationDbContext context)
+        public CategoryRepository(ApplicationDbContext context) : base(context)
         {
-            _context = context;
-        }
-
-        public Category Create(Category category)
-        {
-            _context.Add(category);
-            _context.SaveChanges();
-            return category;
-        }
-
-        public List<Category> GetAll()
-        {
-            var categories = _context.Categories.Include(c=>c.Translations).ToList();
-            return categories;
         }
     }
 }
