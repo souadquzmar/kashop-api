@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Threading.Tasks;
 using KASHOP.DAL.DTO.Request;
 using KASHOP.DAL.DTO.Response;
@@ -26,9 +27,14 @@ namespace KASHOP.BLL.Service
 
         public async Task<List<CategoryResponse>> GetAllCategories()
         {
-            var categories = await _categoryRepository.GetAllAsync();
+            var categories = await _categoryRepository.GetAllAsync(new string[] {nameof(Category.Translations)});
             var categoryResponses = categories.Adapt<List<CategoryResponse>>();
             return categoryResponses;
+        }
+        public async Task<CategoryResponse> GetCategory(Expression<Func<Category,bool>> filter)
+        {
+            var category = await _categoryRepository.GetOne(filter, new string[] {nameof(Category.Translations)});
+            return category.Adapt<CategoryResponse>();
         }
     }
 }

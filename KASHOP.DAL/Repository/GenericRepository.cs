@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
+using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using KASHOP.DAL.Data;
 using Microsoft.EntityFrameworkCore;
@@ -22,11 +24,30 @@ namespace KASHOP.DAL.Repository
             return entity;
         }
 
-        public async Task<List<T>> GetAllAsync()
+        public async Task<List<T>> GetAllAsync(string[]? includes = null)
         {
-            //Include(c=>c.Translations)
-            var entities = await _context.Set<T>().ToListAsync();
-            return entities;
+            IQueryable <T> query = _context.Set<T>();
+            if (includes != null)
+            {
+                foreach(var include in includes)
+                {
+                    query = query.Include(include);
+                }
+            }
+            return await query.ToListAsync();
+        }
+
+        public async Task<T> GetOne(Expression<Func<T, bool>> filter, string[]? includes = null)
+        {
+            IQueryable<T> query = _context.Set<T>();
+            if(includes != null)
+            {
+                foreach(var include in includes)
+                {
+                    query = query.Include(include);
+                }
+            }
+            return await query.FirstOrDefaultAsync(filter);
         }
     }
 }

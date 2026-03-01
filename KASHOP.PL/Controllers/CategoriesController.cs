@@ -47,5 +47,15 @@ namespace KASHOP.PL.Controllers
                 message = _localizer["Success"].Value
             });
         }
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetById(int id)
+        {
+            var response = await _categoryService.GetCategory(c => c.Id == id);
+            return Ok(new
+            {
+                data = response,
+                message = _localizer["Success"].Value
+            });
+        }
     }
 }
