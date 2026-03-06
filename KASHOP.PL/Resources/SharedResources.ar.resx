@@ -3,4 +3,7 @@
   <data name="Success" xml:space="preserve">
     <value>تمت العملية بنجاح</value>
   </data>
+  <data name="NotFound" xml:space="preserve">
+    <value>العنصر غير موجود</value>
+  </data>
 </root>
