@@ -33,5 +33,10 @@ namespace KASHOP.PL.Controllers
                 return BadRequest(response);
             return Ok(response);
         }
+    [HttpGet("ConfirmEmail")]
+    public async Task<IActionResult> ConfirmEmail(string token)
+        {
+            return Ok(new {message = "ok"});
+        }
     }
 }

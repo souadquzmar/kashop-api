@@ -13,9 +13,11 @@ namespace KASHOP.BLL.Service
     public class AuthenticationService : IAuthenticationService
     {
         private readonly UserManager<ApplicationUser> _userManager;
-        public AuthenticationService(UserManager<ApplicationUser> userManager)
+        private readonly IEmailSender _emailSender;
+        public AuthenticationService(UserManager<ApplicationUser> userManager, IEmailSender emailSender)
         {
             _userManager = userManager;
+            _emailSender = emailSender;
         }
 
         public async Task<LoginResponse> LoginAsync(LoginRequest request)
@@ -36,6 +38,9 @@ namespace KASHOP.BLL.Service
             if (!result.Succeeded)
                 return new RegisterResponse() { Success = false, Message = "Error" };
             await _userManager.AddToRoleAsync(user, "User");
+            var token = await _userManager.GenerateEmailConfirmationTokenAsync(user);
+            var emailUrl = "http://localhost:5228/api/account/confirmemail?token={token}";
+            await _emailSender.SendEmailAsync(user.Email,"Welcome",$"<h1>Welcome {user.UserName}</h1>" + $"" + $"<a href='{emailUrl}'> Confirm </a>");
             return new RegisterResponse() { Success = true, Message = "Success" };
         }
     }
