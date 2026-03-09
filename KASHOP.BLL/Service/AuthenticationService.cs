@@ -23,6 +23,7 @@ namespace KASHOP.BLL.Service
             var result = await _userManager.CreateAsync(user, request.Password);
             if (!result.Succeeded)
                 return new RegisterResponse() { Success = false, Message = "Error" };
+            await _userManager.AddToRoleAsync(user,"User");
             return new RegisterResponse() { Success = true, Message = "Success" };
         }
     }

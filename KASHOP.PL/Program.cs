@@ -2,6 +2,7 @@ using KASHOP.BLL.Service;
 using KASHOP.DAL.Data;
 using KASHOP.DAL.Models;
 using KASHOP.DAL.Repository;
+using KASHOP.DAL.utils;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Localization;
 using Microsoft.EntityFrameworkCore;
@@ -42,6 +43,7 @@ builder.Services.Configure<RequestLocalizationOptions>(options => {
 builder.Services.AddScoped<ICategoryRepository,CategoryRepository>();
 builder.Services.AddScoped<ICategoryService,CategoryService>();
 builder.Services.AddScoped<IAuthenticationService,AuthenticationService>();
+builder.Services.AddScoped<ISeedData,RoleSeedData>();
 builder.Services.AddIdentity<ApplicationUser,IdentityRole>().AddEntityFrameworkStores<ApplicationDbContext>();
 var app = builder.Build();
 app.UseRequestLocalization(app.Services.GetRequiredService<IOptions<RequestLocalizationOptions>>().Value);
@@ -57,4 +59,13 @@ app.UseAuthorization();
 
 app.MapControllers();
 
+using (var scope = app.Services.CreateScope())
+{
+    var services = scope.ServiceProvider;
+    var seeders = services.GetServices<ISeedData>();
+    foreach(var seeder in seeders)
+    {
+       await seeder.DataSeed();
+    }
+}
 app.Run();
