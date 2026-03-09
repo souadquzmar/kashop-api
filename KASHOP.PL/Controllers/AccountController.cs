@@ -21,6 +21,16 @@ namespace KASHOP.PL.Controllers
         public async Task<IActionResult> Register(RegisterRequest request)
         {
             var response = await _authenticationService.RegisterAsync(request);
+            if (!response.Success)
+                return BadRequest(response);
+            return Ok(response);
+        }
+        [HttpPost("login")]
+        public async Task<IActionResult> Login(LoginRequest request)
+        {
+            var response = await _authenticationService.LoginAsync(request);
+            if (!response.Success)
+                return BadRequest(response);
             return Ok(response);
         }
     }
