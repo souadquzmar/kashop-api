@@ -29,7 +29,8 @@ var supportedCultures = new[]
     new CultureInfo("ar")
 };
 
-builder.Services.Configure<RequestLocalizationOptions>(options => {
+builder.Services.Configure<RequestLocalizationOptions>(options =>
+{
     options.DefaultRequestCulture = new RequestCulture(defaultCulture);
     options.SupportedCultures = supportedCultures;
     options.SupportedUICultures = supportedCultures;
@@ -40,11 +41,14 @@ builder.Services.Configure<RequestLocalizationOptions>(options => {
     });*/
     options.RequestCultureProviders.Add(new AcceptLanguageHeaderRequestCultureProvider());
 });
-builder.Services.AddScoped<ICategoryRepository,CategoryRepository>();
-builder.Services.AddScoped<ICategoryService,CategoryService>();
-builder.Services.AddScoped<IAuthenticationService,AuthenticationService>();
-builder.Services.AddScoped<ISeedData,RoleSeedData>();
-builder.Services.AddIdentity<ApplicationUser,IdentityRole>()
+builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
+builder.Services.AddScoped<ICategoryService, CategoryService>();
+builder.Services.AddScoped<IAuthenticationService, AuthenticationService>();
+builder.Services.AddScoped<ISeedData, RoleSeedData>();
+builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options =>
+{
+    options.User.RequireUniqueEmail = true;
+})
                 .AddEntityFrameworkStores<ApplicationDbContext>()
                 .AddDefaultTokenProviders();
 builder.Services.AddTransient<IEmailSender, EmailSender>();
@@ -66,9 +70,9 @@ using (var scope = app.Services.CreateScope())
 {
     var services = scope.ServiceProvider;
     var seeders = services.GetServices<ISeedData>();
-    foreach(var seeder in seeders)
+    foreach (var seeder in seeders)
     {
-       await seeder.DataSeed();
+        await seeder.DataSeed();
     }
 }
 app.Run();
