@@ -9,5 +9,6 @@ namespace KASHOP.DAL.DTO.Response
     {
         public Boolean Success {get; set;}
         public string Message {get; set;}
+        public string? AccessToken {get; set;}
     }
 }
