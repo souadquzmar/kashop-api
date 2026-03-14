@@ -10,6 +10,7 @@ using KASHOP.DAL.Models;
 using KASHOP.DAL.Repository;
 using KASHOP.PL.Resources;
 using Mapster;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Localization;
@@ -28,6 +29,7 @@ namespace KASHOP.PL.Controllers
             _localizer=localizer;
         }
         [HttpPost("")]
+        [Authorize]
         public async Task<IActionResult> Create(CategoryRequest request)
         {
             var response = await _categoryService.CreateCategory(request);
