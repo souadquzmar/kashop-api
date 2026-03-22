@@ -42,5 +42,20 @@ namespace KASHOP.PL.Controllers
             else
                 return BadRequest();
         }
+        [HttpPost("SendCode")]
+        public async Task<IActionResult> RequestPasswordReset(ForgotPasswordRequest request)
+        {
+            var result = await _authenticationService.RequestPasswordResetAsync(request);
+            if (result.Success) return Ok(result);
+            else return BadRequest(result);
+        }
+        [HttpPost("ResetPassword")]
+        public async Task<IActionResult> PasswordReset(ResetPasswordRequest request)
+        {
+            var result = await _authenticationService.ResetPasswordAsync(request);
+            if (result.Success)
+                return Ok(result);
+            return BadRequest(result);
+        }
     }
 }
