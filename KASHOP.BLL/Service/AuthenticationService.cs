@@ -70,7 +70,7 @@ namespace KASHOP.BLL.Service
             var user = request.Adapt<ApplicationUser>();
             var result = await _userManager.CreateAsync(user, request.Password);
             if (!result.Succeeded)
-                return new RegisterResponse() { Success = false, Message = "Error" };
+                return new RegisterResponse() { Success = false, Message = "Error" , Errors = result.Errors.Select(p=>p.Description).ToList()};
             await _userManager.AddToRoleAsync(user, "User");
             var token = await _userManager.GenerateEmailConfirmationTokenAsync(user);
             token = Uri.EscapeDataString(token);

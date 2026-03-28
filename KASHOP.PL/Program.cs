@@ -1,3 +1,4 @@
+using KASHOP.BLL.Mapping;
 using KASHOP.BLL.Service;
 using KASHOP.DAL.Data;
 using KASHOP.DAL.Models;
@@ -100,7 +101,7 @@ builder.Services.AddAuthentication(options =>
                 IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Jwt:SecretKey"]))
             };
         });
-
+MapsterConfig.MapsterConfigRegister();
 var app = builder.Build();
 app.UseRequestLocalization(app.Services.GetRequiredService<IOptions<RequestLocalizationOptions>>().Value);
 // Configure the HTTP request pipeline.
