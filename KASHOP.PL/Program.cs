@@ -45,12 +45,12 @@ builder.Services.Configure<RequestLocalizationOptions>(options =>
     });*/
     options.RequestCultureProviders.Add(new AcceptLanguageHeaderRequestCultureProvider());
 });
-var  MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
+var MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
 
 builder.Services.AddCors(options =>
 {
     options.AddPolicy(name: MyAllowSpecificOrigins,
-                      policy  =>
+                      policy =>
                       {
                           policy.AllowAnyOrigin()
                           .AllowAnyMethod()
