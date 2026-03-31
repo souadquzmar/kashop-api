@@ -10,5 +10,6 @@ namespace KASHOP.BLL.Service
     public interface IProductService
     {
         Task<ProductResponse> CreateProduct(ProductRequest request);
+        Task<List<ProductResponse>> GetAllProducts();
     }
 }

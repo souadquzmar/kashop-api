@@ -15,7 +15,7 @@ namespace KASHOP.BLL.Service
                 var fileName = Guid.NewGuid().ToString() + Path.GetExtension(file.FileName);
                 var filePath = Path.Combine(
                     Directory.GetCurrentDirectory(),
-                    "images",
+                    "wwwroot/images",
                     fileName
                 );
                 using(var stream = File.Create(filePath))

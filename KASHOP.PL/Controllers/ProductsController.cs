@@ -33,5 +33,15 @@ namespace KASHOP.PL.Controllers
                 response
             });
         }
+        [HttpGet("")]
+        public async Task<IActionResult> Index()
+        {
+            var products = await _productService.GetAllProducts();
+            return Ok(new
+            {
+                message = _localizer["Success"].Value,
+                products
+            });
+        }
     }
 }
