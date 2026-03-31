@@ -19,8 +19,8 @@ namespace KASHOP.PL.Controllers
         private readonly IStringLocalizer<SharedResources> _localizer;
         public ProductsController(IProductService productService, IStringLocalizer<SharedResources> localizer)
         {
-            _productService=productService;
-            _localizer=localizer;
+            _productService = productService;
+            _localizer = localizer;
         }
         [HttpPost("")]
         [Authorize]
@@ -40,7 +40,22 @@ namespace KASHOP.PL.Controllers
             return Ok(new
             {
                 message = _localizer["Success"].Value,
-                products
+                data = products
+            });
+        }
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetById(int id)
+        {
+            var product = await _productService.GetProduct(p => p.Id == id);
+            if (product == null)
+                return NotFound(new
+                {
+                    message = _localizer["NotFound"].Value,
+                });
+            return Ok(new
+            {
+                message = _localizer["Success"].Value,
+                data = product
             });
         }
     }

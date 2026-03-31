@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Threading.Tasks;
 using KASHOP.DAL.DTO.Request;
 using KASHOP.DAL.DTO.Response;
@@ -16,13 +17,13 @@ namespace KASHOP.BLL.Service
         private readonly IFileService _fileService;
         public ProductService(IProductRepository productRepository, IFileService fileService)
         {
-            _productRepository=productRepository;
-            _fileService=fileService;
+            _productRepository = productRepository;
+            _fileService = fileService;
         }
         public async Task<ProductResponse> CreateProduct(ProductRequest request)
         {
             var product = request.Adapt<Product>();
-            if(request.MainImage != null)
+            if (request.MainImage != null)
             {
                 var imageName = await _fileService.UploadAsync(request.MainImage);
                 product.MainImage = imageName;
@@ -38,6 +39,15 @@ namespace KASHOP.BLL.Service
             );
             var productResponses = products.Adapt<List<ProductResponse>>();
             return productResponses;
+        }
+        public async Task<ProductResponse?> GetProduct(Expression<Func<Product, bool>> filter)
+        {
+            var product = await _productRepository.GetOne(filter,
+            new string[] {
+                nameof(Product.Translations),
+                nameof(Product.CreatedBy)});
+            if (product == null) return null;
+            return product.Adapt<ProductResponse>();
         }
     }
 }
