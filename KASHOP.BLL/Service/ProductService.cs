@@ -49,5 +49,13 @@ namespace KASHOP.BLL.Service
             if (product == null) return null;
             return product.Adapt<ProductResponse>();
         }
+        public async Task<bool> DeleteProduct(int id)
+        {
+            var product = await _productRepository.GetOne(p => p.Id == id);
+            if (product == null)
+                return false;
+            _fileService.Delete(product.MainImage);
+            return await _productRepository.DeleteAsync(product);
+        }
     }
 }

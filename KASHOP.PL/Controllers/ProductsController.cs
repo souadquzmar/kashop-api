@@ -7,6 +7,7 @@ using KASHOP.DAL.DTO.Request;
 using KASHOP.PL.Resources;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Localization;
 
 namespace KASHOP.PL.Controllers
@@ -56,6 +57,21 @@ namespace KASHOP.PL.Controllers
             {
                 message = _localizer["Success"].Value,
                 data = product
+            });
+        }
+        [HttpDelete("{id}")]
+        [Authorize]
+        public async Task<IActionResult> Delete(int id)
+        {
+            var deleted = await _productService.DeleteProduct(id);
+            if (!deleted)
+                return NotFound(new
+                {
+                    message = _localizer["NotFound"].Value
+                });
+            return Ok(new
+            {
+                message = _localizer["Success"].Value
             });
         }
     }
