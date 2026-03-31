@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace KASHOP.DAL.Migrations
 {
     /// <inheritdoc />
-    public partial class productModule : Migration
+    public partial class addProductModule : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)

@@ -17,6 +17,10 @@ namespace KASHOP.BLL.Mapping
             TypeAdapterConfig<Category, CategoryResponse>.NewConfig()
             .Map(dest=>dest.User,source=>source.CreatedBy)
             .Map(dest=>dest.Name,source=>source.Translations.Where(t=>t.Language == CultureInfo.CurrentCulture.Name).Select(t=>t.Name).FirstOrDefault());
+
+            TypeAdapterConfig<Product, ProductResponse>.NewConfig()
+            .Map(dest=>dest.User,source=>source.CreatedBy)
+            .Map(dest=>dest.Name,source=>source.Translations.Where(t=>t.Language == CultureInfo.CurrentCulture.Name).Select(t=>t.Name).FirstOrDefault());
         }
     }
 }
