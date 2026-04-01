@@ -122,10 +122,6 @@ namespace KASHOP.DAL.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("UpdatedById")
                         .HasColumnType("nvarchar(450)");
 

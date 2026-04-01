@@ -3,13 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace KASHOP.DAL.Models
+namespace KASHOP.DAL.DTO.Response
 {
-    public class Brand : AuditableEntity
+    public class BrandResponse
     {
         public int Id {get; set;}
+        public string User {get; set;}
+        public string Name {get; set;}
         public string Logo {get; set;}
-        public List<BrandTranslation> Translations {get; set;}
-        public List<Product> Products {get; set;}
     }
 }

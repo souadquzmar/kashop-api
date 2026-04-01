@@ -9,8 +9,7 @@ namespace KASHOP.DAL.DTO.Request
 {
     public class BrandRequest
     {
-        public string Name {get; set;}
         public IFormFile Logo {get; set;}
-        public List<BrandTranslation> Translations {get; set;}
+        public List<BrandTranslationRequest> Translations {get; set;}
     }
 }

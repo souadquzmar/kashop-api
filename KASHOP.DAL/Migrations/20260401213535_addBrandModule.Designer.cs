@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace KASHOP.DAL.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20260401204656_addBrandModule")]
+    [Migration("20260401213535_addBrandModule")]
     partial class addBrandModule
     {
         /// <inheritdoc />
@@ -122,10 +122,6 @@ namespace KASHOP.DAL.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Logo")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
