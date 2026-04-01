@@ -19,8 +19,8 @@ namespace KASHOP.PL.Controllers
         private readonly IStringLocalizer<SharedResources> _localizer;
         public BrandsController(IBrandService brandService, IStringLocalizer<SharedResources> localizer)
         {
-            _brandService=brandService;
-            _localizer=localizer;
+            _brandService = brandService;
+            _localizer = localizer;
         }
         [HttpPost("")]
         [Authorize]
@@ -28,10 +28,11 @@ namespace KASHOP.PL.Controllers
         {
             var response = await _brandService.CreateBrandAsync(request);
             return Ok(
-                new {
-                    message=_localizer["Success"].Value,
-                    data=response
-                    });
+                new
+                {
+                    message = _localizer["Success"].Value,
+                    data = response
+                });
         }
         [HttpGet("")]
         public async Task<IActionResult> Index()
@@ -40,8 +41,27 @@ namespace KASHOP.PL.Controllers
             return Ok(
                 new
                 {
-                    message=_localizer["Success"].Value,
-                    data=brands
+                    message = _localizer["Success"].Value,
+                    data = brands
+                });
+        }
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetById(int id)
+        {
+            var brand = await _brandService.GetBrandAsync(b => b.Id == id);
+            if (brand == null)
+            {
+                return NotFound(
+                    new
+                    {
+                        message = _localizer["NotFound"].Value,
+                    });
+            }
+            return Ok(
+                new
+                {
+                    message = _localizer["Success"].Value,
+                    data = brand
                 });
         }
     }
