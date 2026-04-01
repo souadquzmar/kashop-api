@@ -64,5 +64,14 @@ namespace KASHOP.PL.Controllers
                     data = brand
                 });
         }
+        [HttpDelete("{id}")]
+        [Authorize]
+        public async Task<IActionResult> Delete(int id)
+        {
+            var isDeleted = await _brandService.DeleteBrandAsync(id);
+            if (!isDeleted)
+                return NotFound(new { message = _localizer["NotFound"].Value });
+            return Ok(new { message = _localizer["Success"].Value });
+        }
     }
 }
