@@ -30,5 +30,15 @@ namespace KASHOP.BLL.Service
             await _brandRepository.CreateAsync(brand);
             return brand.Adapt<BrandResponse>();
         }
+        public async Task<List<BrandResponse>> GetAllBrandsAsync()
+        {
+            var brands = await _brandRepository.GetAllAsync(
+                new string []
+                {
+                    nameof(Brand.Translations),
+                    nameof(Brand.CreatedBy)
+                });
+            return brands.Adapt<List<BrandResponse>>();
+        }
     }
 }

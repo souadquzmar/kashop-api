@@ -33,5 +33,16 @@ namespace KASHOP.PL.Controllers
                     data=response
                     });
         }
+        [HttpGet("")]
+        public async Task<IActionResult> Index()
+        {
+            var brands = await _brandService.GetAllBrandsAsync();
+            return Ok(
+                new
+                {
+                    message=_localizer["Success"].Value,
+                    data=brands
+                });
+        }
     }
 }

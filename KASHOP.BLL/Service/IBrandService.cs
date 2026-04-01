@@ -10,5 +10,6 @@ namespace KASHOP.BLL.Service
     public interface IBrandService
     {
         Task<BrandResponse> CreateBrandAsync (BrandRequest request);
+        Task<List<BrandResponse>> GetAllBrandsAsync ();
     }
 }
