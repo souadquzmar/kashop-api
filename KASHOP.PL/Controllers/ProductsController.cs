@@ -75,9 +75,19 @@ namespace KASHOP.PL.Controllers
             });
         }
         [HttpPatch("{id}")]
+        [Authorize]
         public async Task<IActionResult> Update(int id, [FromForm] ProductUpdateRequest request)
         {
             var updated = await _productService.UpdateProduct(id, request);
+            if (!updated)
+                return BadRequest();
+            return Ok(new { message = _localizer["Success"].Value });
+        }
+        [HttpPatch("{id}/status")]
+        [Authorize]
+        public async Task<IActionResult> ToggleStatus(int id)
+        {
+            var updated = await _productService.ToggleStatus(id);
             if (!updated)
                 return BadRequest();
             return Ok(new { message = _localizer["Success"].Value });

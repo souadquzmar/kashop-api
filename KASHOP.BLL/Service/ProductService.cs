@@ -34,6 +34,7 @@ namespace KASHOP.BLL.Service
         public async Task<List<ProductResponse>> GetAllProducts()
         {
             var products = await _productRepository.GetAllAsync(
+                p=>p.Status == EntityStatus.Active,
                 new string[] {nameof(Product.Translations),
                 nameof(Product.CreatedBy)}
             );
@@ -61,26 +62,26 @@ namespace KASHOP.BLL.Service
         {
             var productDb = await _productRepository.GetOne(
                 p => p.Id == id,
-                new string[] {nameof(Product.Translations)});
+                new string[] { nameof(Product.Translations) });
 
             if (productDb == null)
                 return false;
 
             var oldImage = productDb.MainImage;
             request.Adapt(productDb);
-            
-            if(request.Translations != null)
+
+            if (request.Translations != null)
             {
-                foreach(var translationRequest in request.Translations)
+                foreach (var translationRequest in request.Translations)
                 {
                     var existing = productDb.Translations.FirstOrDefault(t => t.Language == translationRequest.Language);
                     if (existing != null)
                     {
-                        if(translationRequest.Name != null)
+                        if (translationRequest.Name != null)
                         {
                             existing.Name = translationRequest.Name;
                         }
-                        if(translationRequest.Description != null)
+                        if (translationRequest.Description != null)
                         {
                             existing.Description = translationRequest.Description;
                         }
@@ -91,12 +92,20 @@ namespace KASHOP.BLL.Service
                     }
                 }
             }
-            if(request.MainImage != null)
+            if (request.MainImage != null)
             {
                 _fileService.Delete(oldImage);
                 productDb.MainImage = await _fileService.UploadAsync(request.MainImage);
             }
             return await _productRepository.UpdateAsync(productDb);
+        }
+        public async Task<bool> ToggleStatus(int id)
+        {
+            var product = await _productRepository.GetOne(p => p.Id == id);
+            if (product == null)
+                return false;
+            product.Status = product.Status == EntityStatus.Active ? EntityStatus.Inactive : EntityStatus.Active;
+            return await _productRepository.UpdateAsync(product);
         }
     }
 }

@@ -35,6 +35,7 @@ namespace KASHOP.BLL.Service
         public async Task<List<CategoryResponse>> GetAllCategories()
         {
             var categories = await _categoryRepository.GetAllAsync(
+                c=>c.Status == EntityStatus.Active,
                 new string[] {
                 nameof(Category.Translations),
                 nameof(Category.CreatedBy)}
