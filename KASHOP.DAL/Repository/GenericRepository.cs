@@ -56,5 +56,11 @@ namespace KASHOP.DAL.Repository
             }
             return await query.FirstOrDefaultAsync(filter);
         }
+        public async Task<bool> UpdateAsync(T entity)
+        {
+            _context.Update(entity);
+            var affected = await _context.SaveChangesAsync();
+            return affected > 0;
+        }
     }
 }

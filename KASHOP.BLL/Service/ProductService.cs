@@ -57,5 +57,46 @@ namespace KASHOP.BLL.Service
             _fileService.Delete(product.MainImage);
             return await _productRepository.DeleteAsync(product);
         }
+        public async Task<bool> UpdateProduct(int id, ProductUpdateRequest request)
+        {
+            var productDb = await _productRepository.GetOne(
+                p => p.Id == id,
+                new string[] {nameof(Product.Translations)});
+
+            if (productDb == null)
+                return false;
+
+            var oldImage = productDb.MainImage;
+            request.Adapt(productDb);
+            
+            if(request.Translations != null)
+            {
+                foreach(var translationRequest in request.Translations)
+                {
+                    var existing = productDb.Translations.FirstOrDefault(t => t.Language == translationRequest.Language);
+                    if (existing != null)
+                    {
+                        if(translationRequest.Name != null)
+                        {
+                            existing.Name = translationRequest.Name;
+                        }
+                        if(translationRequest.Description != null)
+                        {
+                            existing.Description = translationRequest.Description;
+                        }
+                    }
+                    else
+                    {
+                        return false;
+                    }
+                }
+            }
+            if(request.MainImage != null)
+            {
+                _fileService.Delete(oldImage);
+                productDb.MainImage = await _fileService.UploadAsync(request.MainImage);
+            }
+            return await _productRepository.UpdateAsync(productDb);
+        }
     }
 }
