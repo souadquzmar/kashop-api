@@ -18,17 +18,19 @@ namespace KASHOP.PL.Controllers
     {
         private readonly ICartService _cartService;
         private readonly IStringLocalizer<SharedResources> _localizer;
-        public CartsController (ICartService cartService, IStringLocalizer<SharedResources> localizer)
+        public CartsController(ICartService cartService, IStringLocalizer<SharedResources> localizer)
         {
-            _cartService=cartService;
-            _localizer=localizer;
+            _cartService = cartService;
+            _localizer = localizer;
         }
         [HttpPost("")]
         [Authorize]
         public async Task<IActionResult> AddToCart(AddToCartRequest request)
         {
             var UserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            await _cartService.AddToCart(request, UserId);
+            var result = await _cartService.AddToCart(request, UserId);
+            if (!result)
+                return BadRequest();
             return Ok(new
             {
                 message = _localizer["Success"].Value

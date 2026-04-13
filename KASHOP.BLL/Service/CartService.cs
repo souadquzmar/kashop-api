@@ -12,17 +12,26 @@ namespace KASHOP.BLL.Service
     public class CartService : ICartService
     {
         private readonly ICartRepository _cartRepository;
-        public CartService (ICartRepository cartRepository)
+        private readonly IProductRepository _productRepository;
+        public CartService(ICartRepository cartRepository, IProductRepository productRepository)
         {
-            _cartRepository=cartRepository;
+            _cartRepository = cartRepository;
+            _productRepository = productRepository;
         }
-        public async Task AddToCart(AddToCartRequest request, string UserId)
+        public async Task<bool> AddToCart(AddToCartRequest request, string UserId)
         {
+            var product = await _productRepository.GetOne(p => p.Id == request.ProductId);
+            if (product == null)
+                return false;
             var ExistingItem = await _cartRepository.GetOne(
-                c=>c.ProductId == request.ProductId && c.UserId == UserId
+                c => c.ProductId == request.ProductId && c.UserId == UserId
             );
 
-            if(ExistingItem != null)
+            var currentCount = ExistingItem?.Count ?? 0;
+            var newCount = currentCount + request.Count;
+            if (newCount > product.Quantity)
+                return false;
+            if (ExistingItem != null)
             {
                 ExistingItem.Count += request.Count;
                 await _cartRepository.UpdateAsync(ExistingItem);
@@ -33,6 +42,7 @@ namespace KASHOP.BLL.Service
                 cartItem.UserId = UserId;
                 await _cartRepository.CreateAsync(cartItem);
             }
+            return true;
         }
     }
 }

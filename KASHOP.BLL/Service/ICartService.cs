@@ -8,6 +8,6 @@ namespace KASHOP.BLL.Service
 {
     public interface ICartService
     {
-        Task AddToCart(AddToCartRequest request, string UserId);
+        Task<bool> AddToCart(AddToCartRequest request, string UserId);
     }
 }
