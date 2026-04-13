@@ -22,7 +22,8 @@ namespace KASHOP.PL.Extensions
             Services.AddScoped<IAuthenticationService, AuthenticationService>();
             Services.AddScoped<ISeedData, RoleSeedData>();
             Services.AddTransient<IEmailSender, EmailSender>();
-
+            Services.AddScoped<ICartRepository,CartRepository>();
+            Services.AddScoped<ICartService,CartService>();
             return Services;
         }
     }
